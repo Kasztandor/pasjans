@@ -1,9 +1,38 @@
 var cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
-function pCard(x){ //previous card
-	
+function previousAndNextCard(x){ //previous card
+	var index = cards.indexOf(x)
+	if (index != -1){
+		var ret = []
+		if (index==0){
+			ret.push(-1)
+		}
+		else{
+			ret.push(cards[index-1])
+		}
+		if (index==(cards.length-1)){
+			ret.push(-1)
+		}
+		else{
+			ret.push(cards[index+1])
+		}
+		return ret
+	}
+	return -1
 }
-function nCard(x){ //next card
-	//
+function checkSimbol(a, b, x=0){
+	var classes = [(a.classList.contains("pik")?"pik":""+a.classList.contains("kier")?"kier":""+a.classList.contains("trefl")?"trefl":""+a.classList.contains("karo")?"karo":""),(b.classList.contains("pik")?"pik":""+b.classList.contains("kier")?"kier":""+b.classList.contains("trefl")?"trefl":""+b.classList.contains("karo")?"karo":"")]
+	if (x==0){ // another color
+		var check = (classes[0]=="pik"?)
+		if(classes[0] == classes[1]){
+			return true
+		}
+	}
+	else if (x==1){ // exactly the same
+		if(classes[0] == classes[1]){
+			return true
+		}
+	}
+	return false
 }
 function dragRenew(){
 	document.querySelectorAll(".card").forEach((t)=>{
