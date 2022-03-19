@@ -1,12 +1,10 @@
-:root{
-	--cw: 150px; /*card width*/
-	--ch: calc(var(--cw) / 3 * 5); /*card height*/
-}
+/* pik ♠︎ kier ♥︎ trefl ♣ karo ♦ */
 body{
 	background-color: green;
 	margin: 0;
 	padding: 10px;
 	position: relative;
+	user-select: none;
 }
 /* TOP */
 #left, #right{
@@ -15,10 +13,12 @@ body{
 }
 #left{
 	width: 30%;
+	max-width: calc(var(--cw) * 2 + 40px);
 }
 #right{
 	float: right;
 	width: 60%;
+	max-width: calc(var(--cw) * 4 + 80px);
 }
 .column0{
 	float: left;
@@ -29,6 +29,10 @@ body{
 	width: calc(100% / 4);
 }
 /* BOTTOM */
+#bottom{
+	max-width: calc(var(--cw) * 7 + 140px);
+	margin: 0 auto;
+}
 .column2{
 	float: left;
 	width: calc(100% / 7);
@@ -54,6 +58,8 @@ div{
 }
 .card{
 	background-color: white;
+	cursor: grab;
+	text-align: center;
 }
 .hidecard{
 	background-color: blue;
@@ -66,4 +72,23 @@ div{
 }
 .cb{
 	clear: both;
+}
+.dragging{
+	background-color: gray;
+}
+.pik{color: black;} /*♠︎*/
+.pik:after{
+	content: "♠︎";
+}
+.kier{color: red;} /*♥︎*/
+.kier:after{
+	content: "♠︎";
+}
+.trefl{color: black;} /*♣*/
+.trefl:after{
+	content: "♠︎";
+}
+.karo{color: red;} /*♦*/
+.karo:after{
+	content: "♠︎";
 }

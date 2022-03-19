@@ -1,35 +1,37 @@
+<!-- pik ♠︎ kier ♥︎ trefl ♣ karo ♦ -->
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<title>Pasjans</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="script.js"></script>
 </head>
-<body>
+<body style="--cw: 150px; --ch: calc(var(--cw) / 3 * 5);">
 	<section>
 		<div id="top">
 			<div id="left">
-				<div class="column0"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p0"><div draggable="true" ondragstart="drag(event)" class="hidecard"></div></div></div>
-				<div class="column0"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p1"></div></div>
+				<div class="column0"><div class="empty"></div><div id="p0"></div></div>
+				<div class="column0"><div class="empty"></div><div id="p1"></div></div>
 				<div class="cb"></div>
 			</div>
 			<div id="right">
-				<div class="column1"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p2"></div></div>
-				<div class="column1"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p3"></div></div>
-				<div class="column1"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p4"></div></div>
-				<div class="column1"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p5"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p2"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p3"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p4"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p5"></div></div>
 				<div class="cb"></div>
 			</div>
 			<div class="cb"></div>
 		</div>
 		<div id="bottom">
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p6"></div></div>
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p7"></div></div>
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p8"></div></div>
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p9"></div></div>
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p10"></div></div>
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p11"></div></div>
-			<div class="column2"><div class="empty" ondrop="drop(event)" ondragover="allowDrop(event)"></div><div id="p12"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p6"><div draggable="true" class="card pik">6</div></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p7"><div draggable="true" class="card kier">5</div></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p8"><div draggable="true" class="card trefl">4</div></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p9"><div draggable="true" class="card karo">3</div></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p10"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p11"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p12"></div></div>
 			<div class="cb"></div>
 		</div>
 	</section>
