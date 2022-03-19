@@ -1,0 +1,69 @@
+:root{
+	--cw: 150px; /*card width*/
+	--ch: calc(var(--cw) / 3 * 5); /*card height*/
+}
+body{
+	background-color: green;
+	margin: 0;
+	padding: 10px;
+	position: relative;
+}
+/* TOP */
+#left, #right{
+	float: left;
+	height: calc(var(--ch) + 10px);
+}
+#left{
+	width: 30%;
+}
+#right{
+	float: right;
+	width: 60%;
+}
+.column0{
+	float: left;
+	width: calc(100% / 2);
+}
+.column1{
+	float: right;
+	width: calc(100% / 4);
+}
+/* BOTTOM */
+.column2{
+	float: left;
+	width: calc(100% / 7);
+}
+/* Universal */
+.column0, .column1, .column2{
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+div{
+	min-height: 1px;
+}
+.card, .empty, .hidecard{
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: var(--cw);
+	height: var(--ch);
+	border: 1px solid black;
+	border-radius: 10px;
+}
+.card{
+	background-color: white;
+}
+.hidecard{
+	background-color: blue;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.empty{
+	background-color: darkgreen;
+}
+.cb{
+	clear: both;
+}
