@@ -66,6 +66,14 @@ function positioning(t){
 	})
 }
 window.onload = () => {
+	document.querySelectorAll(".column0")[1].addEventListener("dragover", ()=>{
+		if (document.querySelector(".dragging").parentNode != document.querySelectorAll(".column0")[1].children[1] && (allowEverything || document.querySelectorAll(".column0")[1] == lastColum)){
+			if (Array.prototype.indexOf.call(document.querySelector(".dragging").parentNode.children,document.querySelector(".dragging")) == document.querySelector(".dragging").parentNode.childElementCount-1){
+				document.querySelectorAll(".column0")[1].children[1].appendChild(document.querySelector(".dragging"))
+				document.querySelectorAll(".column0")[1].children[1].lastElementChild.style.top=""
+			}
+		}
+	})
 	document.querySelectorAll(".column1").forEach((t)=>{
 		t.addEventListener("dragover", ()=>{
 			if (document.querySelector(".dragging").parentNode != t.children[1] && (allowEverything || (t.lastChild.lastChild==null && document.querySelector(".dragging").innerHTML[0]==cards[0]) || (checkColor(document.querySelector(".dragging"),t.lastChild.lastChild,1) && previousAndNextCard(document.querySelector(".dragging").innerHTML[0])[0]==t.lastChild.lastChild.innerHTML[0]))){

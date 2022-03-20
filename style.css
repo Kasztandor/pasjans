@@ -46,7 +46,7 @@ body{
 div{
 	min-height: 1px;
 }
-.card, .empty, .hidecard{
+.empty, .card, .hidecard, .pickcard{
 	position: absolute;
 	top: 0;
 	left: 50%;
@@ -55,6 +55,9 @@ div{
 	height: var(--ch);
 	border: 1px solid black;
 	border-radius: 10px;
+}
+.empty{
+	background-color: darkgreen;
 }
 .card{
 	background-color: white;
@@ -70,8 +73,12 @@ div{
 	justify-content: center;
 	align-items: center;
 }
-.empty{
-	background-color: darkgreen;
+.pickcard{
+	background-color: blue;
+	cursor: pointer;
+}
+.pickcardRedro{
+	background-color: darkblue;
 }
 .cb{
 	clear: both;
