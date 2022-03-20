@@ -1,4 +1,6 @@
 var cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
+var lastColum = ""
+
 function previousAndNextCard(x){ //previous card
 	var index = cards.indexOf(x)
 	if (index != -1){
@@ -20,10 +22,9 @@ function previousAndNextCard(x){ //previous card
 	return -1
 }
 function checkSimbol(a, b, x=0){
-	var classes = [(a.classList.contains("pik")?"pik":""+a.classList.contains("kier")?"kier":""+a.classList.contains("trefl")?"trefl":""+a.classList.contains("karo")?"karo":""),(b.classList.contains("pik")?"pik":""+b.classList.contains("kier")?"kier":""+b.classList.contains("trefl")?"trefl":""+b.classList.contains("karo")?"karo":"")]
+	var classes = [(a.classList.contains("pik")?0:a.classList.contains("kier")?1:a.classList.contains("trefl")?2:3),(b.classList.contains("pik")?0:b.classList.contains("kier")?1:b.classList.contains("trefl")?2:3)]
 	if (x==0){ // another color
-		var check = (classes[0]=="pik"?)
-		if(classes[0] == classes[1]){
+		if((classes[0]+classes[1])%2!=0){
 			return true
 		}
 	}
@@ -38,6 +39,7 @@ function dragRenew(){
 	document.querySelectorAll(".card").forEach((t)=>{
 		t.addEventListener("dragstart", (event)=>{
 			t.classList.add("dragging")
+			lastColum = t.parentNode
 			event.dataTransfer.setDragImage(event.target, window.outerWidth, window.outerHeight);
 		})
 		t.addEventListener("dragend", ()=>{
