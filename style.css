@@ -60,9 +60,12 @@ div{
 	background-color: white;
 	cursor: grab;
 	text-align: center;
+	line-height: calc((var(--ch) / 8));
 }
 .hidecard{
 	background-color: blue;
+	color: bule;
+	font-size: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -82,13 +85,13 @@ div{
 }
 .kier{color: red;} /*♥︎*/
 .kier:after{
-	content: "♠︎";
+	content: "♥︎";
 }
 .trefl{color: black;} /*♣*/
 .trefl:after{
-	content: "♠︎";
+	content: "♣";
 }
 .karo{color: red;} /*♦*/
 .karo:after{
-	content: "♠︎";
+	content: "♦";
 }
