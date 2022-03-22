@@ -78,7 +78,7 @@ div{
 	cursor: pointer;
 }
 .pickcardRedro{
-	background-color: darkblue;
+	background-color: darkgreen;
 }
 .cb{
 	clear: both;
@@ -101,4 +101,14 @@ div{
 .karo{color: red;} /*♦*/
 .karo:after{
 	content: "♦";
+}
+#win{
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: calc(100vw - 20px);
+	height: calc(100vh - 20px);
+	font-size: 50vh;
+	color: red;
 }

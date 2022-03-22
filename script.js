@@ -1,7 +1,59 @@
-var cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
+var cards = ["A","2","3","4","5","6","7","8","9","1"/*10*/,"J","Q","K"]
+//var stock = [["kier", "K"],["pik","Q"],["trefl","J"],["karo","10"]]
+var stock = []
 var lastColum = ""
 var allowEverything = false
 
+function checkWin(){
+	if (stock.length == 0 && document.querySelectorAll(".column0")[1].lastChild.children.length == 0){
+		var count = 0
+		document.querySelectorAll(".column2").forEach((t)=>{
+			Array.prototype.forEach.call(t.lastChild.children, ()=>{
+				count++
+			})
+		})
+		if (count){
+			document.querySelector("section").innerHTML='<div id="win">WIN</div>'
+		}
+	}
+}
+function dragAdd(t){	
+	t.addEventListener("dragstart", (event)=>{
+		t.classList.add("dragging")
+		lastColum = t.parentNode.parentNode
+		event.dataTransfer.setDragImage(event.target, window.outerWidth, window.outerHeight);
+	})
+	t.addEventListener("dragend", ()=>{
+		t.classList.remove("dragging")
+		unhide()
+		//checkWin()
+	})
+}
+function pick(t){
+	if (stock.length > 0){
+		var x = document.createElement("div");
+		x.innerHTML=stock[stock.length-1][1]
+		x.classList.add(stock[stock.length-1][0])
+		x.classList.add("card")
+		x.draggable=true
+		dragAdd(x)
+		document.querySelectorAll(".column0")[1].lastChild.appendChild(x)
+		if (stock.length == 1){
+			t.classList.add("pickcardRedro")
+		}
+		stock.pop()
+	}
+	else{
+		Array.prototype.forEach.call(document.querySelectorAll(".column0")[1].lastChild.children, (tt)=>{
+			stock.unshift([tt.classList.contains("pik")?"pik":tt.classList.contains("kier")?"kier":tt.classList.contains("trefl")?"trefl":"karo",tt.innerHTML])
+		})
+		if (stock.length > 0){
+			t.classList.remove("pickcardRedro")
+			document.querySelectorAll(".column0")[1].lastChild.innerHTML=""
+		}
+		
+	}
+}
 function unhide(){
 	document.querySelectorAll(".hidecard").forEach((t)=>{
 		if (t == t.parentNode.lastChild){
@@ -49,23 +101,39 @@ function checkColor(a, b, x=0){
 	}
 	return false
 }
-function dragAdd(t){
-	t.addEventListener("dragstart", (event)=>{
-		t.classList.add("dragging")
-		lastColum = t.parentNode.parentNode
-		event.dataTransfer.setDragImage(event.target, window.outerWidth, window.outerHeight);
-	})
-	t.addEventListener("dragend", ()=>{
-		t.classList.remove("dragging")
-		unhide()
-	})
-}
 function positioning(t){
-	Array.prototype.forEach.call(t.children[1].children, (tt)=>{
+	Array.prototype.forEach.call(t.children, (tt)=>{
 		tt.style.top = "calc((var(--ch) / 8) * "+Array.prototype.indexOf.call(tt.parentNode.children, tt)+")"
 	})
 }
 window.onload = () => {
+	/*<div class="hidecard pik">J</div>*/
+	var allCards = []
+	for (var i = 0; i <=3; i++){
+		var iCard = i==0?"pik":i==1?"kier":i==2?"trefl":"karo"
+		for (var j = 2; j<=10; j++){
+			allCards.push([iCard,j])
+		}
+		for (var j = 0; j<=3; j++){
+			allCards.push([iCard,j==0?"J":j==1?"Q":j==2?"K":"A"])
+		}
+	}
+	var randomCardsOrder = []
+	while (allCards.length > 0){
+		randomCardsOrder.push(allCards.splice(Math.floor(Math.random()*allCards.length),1)[0])
+	}
+	for (var i=0; i<7; i++){
+		for (var j=0; j<=i; j++){
+			var card = randomCardsOrder.pop()
+			var col = document.querySelectorAll(".column2")[i].lastChild
+			col.innerHTML+='<div class="hidecard '+card[0]+'">'+card[1]+'</div>'
+			positioning(col)
+		}
+	}
+	while (randomCardsOrder.length > 0){
+		var card = randomCardsOrder.pop()
+		stock.push([card[0],card[1]])
+	}
 	document.querySelectorAll(".column0")[1].addEventListener("dragover", ()=>{
 		if (document.querySelector(".dragging").parentNode != document.querySelectorAll(".column0")[1].children[1] && (allowEverything || document.querySelectorAll(".column0")[1] == lastColum)){
 			if (Array.prototype.indexOf.call(document.querySelector(".dragging").parentNode.children,document.querySelector(".dragging")) == document.querySelector(".dragging").parentNode.childElementCount-1){
@@ -83,7 +151,6 @@ window.onload = () => {
 				}
 			}
 		})
-		positioning(t)
 	})
 	document.querySelectorAll(".column2").forEach((t)=>{
 		t.addEventListener("dragover", ()=>{
@@ -92,10 +159,9 @@ window.onload = () => {
 				for (var i = Array.prototype.indexOf.call(parent.children, document.querySelector(".dragging")); i < parent.childElementCount;){
 					t.children[1].appendChild(parent.children[i])
 				}
-				positioning(t)
+				positioning(t.lastChild)
 			}
 		})
-		positioning(t)
 	})
 	unhide()
 }
