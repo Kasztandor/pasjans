@@ -114,6 +114,7 @@ div{
 }
 
 section:last-child{
+	font-size: 16px;
 	position: absolute;
 	top: 100vh;
 	left: 100vw;
