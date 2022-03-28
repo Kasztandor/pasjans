@@ -1,167 +1,180 @@
-var cards = ["A","2","3","4","5","6","7","8","9","1"/*10*/,"J","Q","K"]
-//var stock = [["kier", "K"],["pik","Q"],["trefl","J"],["karo","10"]]
-var stock = []
-var lastColum = ""
-var allowEverything = false
+﻿window.onload = () => {
+	window.onresize = boxSize
+	boxSize()
+	startPage()
+}
 
-function checkWin(){
-	if (stock.length == 0 && document.querySelectorAll(".column0")[1].lastChild.children.length == 0){
-		var count = 0
-		document.querySelectorAll(".column2").forEach((t)=>{
-			Array.prototype.forEach.call(t.lastChild.children, ()=>{
-				count++
-			})
-		})
-		if (count){
-			document.querySelector("section").innerHTML='<div id="win">WIN</div>'
+var interwalel
+var board
+var pressedArrow = ""
+var direction = ""
+var sizeBar = [4, 4]
+var size = [sizeBar[0]*2+3, sizeBar[1]*2+7]
+var speedBar = 2
+var speed = 200
+var apple = [0,0]
+var texturesBar = 0
+var textures = {0:"default",1:"holy-shit",2:"ukraina",3:"duda",4:"arnold"}
+var speedNames = {0:"bardzo wolna",1:"wolna",2:"normalna",3:"szybka",4:"bardzo szybka"}
+var bsize = 50
+
+function boxSize() {
+	var bs1 = Math.floor(window.innerHeight / (size[0]))
+	var bs2 = Math.floor(window.innerWidth / (size[1]))
+	bsize = bs1>bs2?bs2:bs1
+	//bsize = bs1
+	document.documentElement.style.setProperty('--box-size', bsize+'px');
+}
+function startPage(){
+	document.getElementsByTagName("main")[0].innerHTML='<h1>Swobodny wenż</h1>Tekstury:<br><input id="textures" type="range" min="0" max="'+(Object.keys(textures).length-1)+'" value="'+texturesBar+'"><br><span id="texturesDisplay">'+textures[texturesBar]+'</span><br><br><div id="texturesPresentation"><div id="texturesPresentation"><img class="dimg" src="resources/'+textures[texturesBar]+'/skin0.png"><img class="dimg" src="resources/'+textures[texturesBar]+'/skin1.png"><img class="dimg" src="resources/'+textures[texturesBar]+'/skin2.png"> <img class="dimg" src="resources/'+textures[texturesBar]+'/fruit.png"> <img class="dimg" src="resources/'+textures[texturesBar]+'/background.png"></div></div><br>Wysokość planszy:<input id="boardHeight" type="range" min="1" max="8" value="'+sizeBar[0]+'"><span id="boardHeightDisplay">'+size[0]+'</span><br>Szerokość planszy:<input id="boardWidth" type="range" min="1" max="8" value="'+sizeBar[1]+'"><span id="boardWidthDisplay">'+size[1]+'</span><br>Szybkość:<input id="boardSpeed" type="range" min="0" max="4" value="'+speedBar+'"><span id="boardSpeedDisplay">normalna</span><br><br><button onclick=\'start(size[0],size[1])\'>Rozpocznij!</button>';
+	document.querySelector("#textures").oninput = function(){
+		texturesBar = this.value;
+		var fldName = textures[texturesBar];
+		document.querySelector("#texturesDisplay").innerHTML = fldName+":";
+		document.querySelector("#texturesPresentation").innerHTML = '<img class="dimg" src="resources/'+fldName+'/skin0.png"><img class="dimg" src="resources/'+fldName+'/skin1.png"><img class="dimg" src="resources/'+fldName+'/skin2.png">&emsp;<img class="dimg" src="resources/'+fldName+'/fruit.png">&emsp;<img class="dimg" src="resources/'+fldName+'/background.png">';
+		document.documentElement.style.setProperty('--skin0', 'url("resources/'+fldName+'/skin0.png")');
+		document.documentElement.style.setProperty('--skin1', 'url("resources/'+fldName+'/skin1.png")');
+		document.documentElement.style.setProperty('--skin2', 'url("resources/'+fldName+'/skin2.png")');
+		document.documentElement.style.setProperty('--bgground', 'url("resources/'+fldName+'/background.png")');
+		document.documentElement.style.setProperty('--fruit', 'url("resources/'+fldName+'/fruit.png")');
+	}
+	document.querySelector("#boardHeight").oninput = function(){
+		sizeBar[0] = this.value;
+		size[0] = sizeBar[0]*2+3;
+		document.querySelector("#boardHeightDisplay").innerHTML = size[0];
+		boxSize()
+	}
+	document.querySelector("#boardWidth").oninput = function(){
+		sizeBar[1] = this.value;
+		size[1] = sizeBar[1]*2+7;
+		document.querySelector("#boardWidthDisplay").innerHTML = size[1];
+		boxSize()
+	}
+	document.querySelector("#boardSpeed").oninput = function(){
+		speedBar = this.value;
+		document.querySelector("#boardSpeedDisplay").innerHTML = speedNames[speedBar];
+		if (this.value == 0){
+			speed = 500;
+		}
+		else if (this.value == 1){
+			speed = 300;
+		}
+		else if (this.value == 2){
+			speed = 200;
+		}
+		else if (this.value == 3){
+			speed = 100;
+		}
+		else if (this.value == 4){
+			speed = 50;
 		}
 	}
 }
-function dragAdd(t){	
-	t.addEventListener("dragstart", (event)=>{
-		t.classList.add("dragging")
-		lastColum = t.parentNode.parentNode
-		event.dataTransfer.setDragImage(event.target, window.outerWidth, window.outerHeight);
-	})
-	t.addEventListener("dragend", ()=>{
-		t.classList.remove("dragging")
-		unhide()
-		//checkWin()
-	})
-}
-function pick(t){
-	if (stock.length > 0){
-		var x = document.createElement("div");
-		x.innerHTML=stock[stock.length-1][1]
-		x.classList.add(stock[stock.length-1][0])
-		x.classList.add("card")
-		x.draggable=true
-		dragAdd(x)
-		document.querySelectorAll(".column0")[1].lastChild.appendChild(x)
-		if (stock.length == 1){
-			t.classList.add("pickcardRedro")
+
+function placeApple(){
+	var repeat = true;
+	while (repeat){
+		repeat = false;
+		var x = Math.floor(Math.random()*size[0]);
+		var y = Math.floor(Math.random()*size[1]);
+		for (const i of board){
+			if(i[0]==x && i[1]==y){
+				repeat = true;
+			}
 		}
-		stock.pop()
+	}
+	apple = [x,y];
+}
+function game(){
+	var panzerkampfwagen = "";
+	var xmov = 0;
+	var ymov = 0;
+
+	/* Określenie kierunku */
+	if (pressedArrow=="ArrowUp" && direction!="down"){
+		direction = "up";
+	}
+	else if (pressedArrow=="ArrowDown" && direction!="up"){
+		direction = "down";
+	}
+	else if (pressedArrow=="ArrowLeft" && direction!="right"){
+		direction = "left";
+	}
+	else if (pressedArrow=="ArrowRight" && direction!="left"){
+		direction = "right";
+	}
+
+	/* Ruch */
+	if (direction == "up"){
+		ymov = -1;
+		document.documentElement.style.setProperty('--headdirection', "50% 50% 0 0");
+	}
+	else if (direction == "down"){
+		ymov = 1;
+		document.documentElement.style.setProperty('--headdirection', "0 0 50% 50%");
+	}
+	else if (direction == "left"){
+		xmov = -1;
+		document.documentElement.style.setProperty('--headdirection', "50% 0 0 50%");
+	}
+	else if (direction == "right"){
+		xmov = 1;
+		document.documentElement.style.setProperty('--headdirection', "0 50% 50% 0");
+	}
+
+	/* Tworzenie w tablicy nowego punktu bycia wonza */
+	if (xmov != 0 || ymov != 0){
+		board.push([(board[board.length-1][0] + ymov),(board[board.length-1][1] + xmov)])
+	}
+	var lose = false
+	/* sprawdzanie samouderzenia */
+	for (var i = 0; i<board.length-1; i++){
+		if(board[i]+""==board[board.length-1]+"" && direction!=""){
+			lose = true
+		}
+	}
+	if ((board[board.length-1][0]>=size[0] || board[board.length-1][1]>=size[1] || board[board.length-1][0]<0 || board[board.length-1][1]<0) || lose){
+		/* W razie przegranej */
+		document.querySelector("#snake").innerHTML += '<span id="snejklus">Przegrałeś!!!</span><div id="wynikulus">Wynik: '+(board.length-4)+'</div><div id="divulus"><button onclick="start()">Jeszcze raz</button> <button onclick="startPage()">Zmień ustawienia</button></div>';
+		clearInterval(interwalel);
+		pressedArrow = "";
 	}
 	else{
-		Array.prototype.forEach.call(document.querySelectorAll(".column0")[1].lastChild.children, (tt)=>{
-			stock.unshift([tt.classList.contains("pik")?"pik":tt.classList.contains("kier")?"kier":tt.classList.contains("trefl")?"trefl":"karo",tt.innerHTML])
-		})
-		if (stock.length > 0){
-			t.classList.remove("pickcardRedro")
-			document.querySelectorAll(".column0")[1].lastChild.innerHTML=""
-		}
-		
-	}
-}
-function unhide(){
-	document.querySelectorAll(".hidecard").forEach((t)=>{
-		if (t == t.parentNode.lastChild){
-			t.classList.remove("hidecard")
-			t.classList.add("card")
-			t.draggable=true
-			dragAdd(t)
-		}
-	})
-}
-function previousAndNextCard(x){
-	var index = cards.indexOf(x)
-	if (index != -1){
-		var ret = []
-		if (index==0){
-			ret.push(-1)
+		document.querySelector("#snake").innerHTML = "";
+		/* Sprawdzanie czy jabłko wszamane i losowanie mu nowej pozycji */
+		if ((board[board.length-1][0] == apple[0] && board[board.length-1][1] == apple[1]) == false && direction != ""){
+			board.splice(0,1)
 		}
 		else{
-			ret.push(cards[index-1])
+			placeApple();
 		}
-		if (index==(cards.length-1)){
-			ret.push(-1)
-		}
-		else{
-			ret.push(cards[index+1])
-		}
-		return ret
-	}
-	return -1
-}
-function checkColor(a, b, x=0){
-	if (a==null || b==null){
-		return false
-	}
-	var classes = [(a.classList.contains("pik")?0:a.classList.contains("kier")?1:a.classList.contains("trefl")?2:3),(b.classList.contains("pik")?0:b.classList.contains("kier")?1:b.classList.contains("trefl")?2:3)]
-	if (x==0){ // another color
-		if((classes[0]+classes[1])%2!=0){
-			return true
-		}
-	}
-	else if (x==1){ // exactly the same
-		if(classes[0] == classes[1]){
-			return true
-		}
-	}
-	return false
-}
-function positioning(t){
-	Array.prototype.forEach.call(t.children, (tt)=>{
-		tt.style.top = "calc((var(--ch) / 8) * "+Array.prototype.indexOf.call(tt.parentNode.children, tt)+")"
-	})
-}
-window.onload = () => {
-	/*<div class="hidecard pik">J</div>*/
-	var allCards = []
-	for (var i = 0; i <=3; i++){
-		var iCard = i==0?"pik":i==1?"kier":i==2?"trefl":"karo"
-		for (var j = 2; j<=10; j++){
-			allCards.push([iCard,j])
-		}
-		for (var j = 0; j<=3; j++){
-			allCards.push([iCard,j==0?"J":j==1?"Q":j==2?"K":"A"])
-		}
-	}
-	var randomCardsOrder = []
-	while (allCards.length > 0){
-		randomCardsOrder.push(allCards.splice(Math.floor(Math.random()*allCards.length),1)[0])
-	}
-	for (var i=0; i<7; i++){
-		for (var j=0; j<=i; j++){
-			var card = randomCardsOrder.pop()
-			var col = document.querySelectorAll(".column2")[i].lastChild
-			col.innerHTML+='<div class="hidecard '+card[0]+'">'+card[1]+'</div>'
-			positioning(col)
-		}
-	}
-	while (randomCardsOrder.length > 0){
-		var card = randomCardsOrder.pop()
-		stock.push([card[0],card[1]])
-	}
-	document.querySelectorAll(".column0")[1].addEventListener("dragover", ()=>{
-		if (document.querySelector(".dragging").parentNode != document.querySelectorAll(".column0")[1].children[1] && (allowEverything || document.querySelectorAll(".column0")[1] == lastColum)){
-			if (Array.prototype.indexOf.call(document.querySelector(".dragging").parentNode.children,document.querySelector(".dragging")) == document.querySelector(".dragging").parentNode.childElementCount-1){
-				document.querySelectorAll(".column0")[1].children[1].appendChild(document.querySelector(".dragging"))
-				document.querySelectorAll(".column0")[1].children[1].lastElementChild.style.top=""
+		/* Wyświetlanie ciała wonża */
+		for (var i = 0; i < board.length-1; i++){
+			if ((board.length-i)%2==0){
+				var ins = "ba";
 			}
+			else{
+				var ins = "bb"
+			}
+			document.querySelector("#snake").innerHTML += '<div class="a '+ins+'" style="top: calc(var(--box-size) * '+board[i][0]+'); left: calc(var(--box-size) * '+board[i][1]+');"></div>';
 		}
-	})
-	document.querySelectorAll(".column1").forEach((t)=>{
-		t.addEventListener("dragover", ()=>{
-			if (document.querySelector(".dragging").parentNode != t.children[1] && (allowEverything || (t.lastChild.lastChild==null && document.querySelector(".dragging").innerHTML[0]==cards[0]) || (checkColor(document.querySelector(".dragging"),t.lastChild.lastChild,1) && previousAndNextCard(document.querySelector(".dragging").innerHTML[0])[0]==t.lastChild.lastChild.innerHTML[0]))){
-				if (Array.prototype.indexOf.call(document.querySelector(".dragging").parentNode.children,document.querySelector(".dragging")) == document.querySelector(".dragging").parentNode.childElementCount-1){
-					t.children[1].appendChild(document.querySelector(".dragging"))
-					t.children[1].lastElementChild.style.top=""
-				}
-			}
-		})
-	})
-	document.querySelectorAll(".column2").forEach((t)=>{
-		t.addEventListener("dragover", ()=>{
-			if (document.querySelector(".dragging").parentNode != t.children[1] && (allowEverything || t == lastColum || (t.lastChild.lastChild==null && document.querySelector(".dragging").innerHTML[0]==cards[cards.length-1]) || (checkColor(document.querySelector(".dragging"),t.lastChild.lastChild) && previousAndNextCard(document.querySelector(".dragging").innerHTML[0])[1]==t.lastChild.lastChild.innerHTML[0]))){
-				var parent = document.querySelector(".dragging").parentNode
-				for (var i = Array.prototype.indexOf.call(parent.children, document.querySelector(".dragging")); i < parent.childElementCount;){
-					t.children[1].appendChild(parent.children[i])
-				}
-				positioning(t.lastChild)
-			}
-		})
-	})
-	unhide()
+		/* Wyświetlanie głowy wonża */
+		document.querySelector("#snake").innerHTML += '<div class="a c" style="top: calc(var(--box-size) * '+board[board.length-1][0]+'); left: calc(var(--box-size) * '+board[board.length-1][1]+');"></div>';
+		/* Wyświetlanie owoceła */
+		document.querySelector("#snake").innerHTML += '<div id="frucht" style="top: calc(var(--box-size) * '+apple[0]+'); left: calc(var(--box-size) * '+apple[1]+');"></div>';
+	}
 }
+function start(){
+	direction = "";
+	pressedArrow = "";
+	document.documentElement.style.setProperty('--headdirection', "0 0 0 0");
+	board = [[Math.floor((size[0])/2),Math.floor((size[1])/2)],[Math.floor((size[0])/2),Math.floor((size[1])/2)],[Math.floor((size[0])/2),Math.floor((size[1])/2)]];
+	document.documentElement.style .setProperty('--hei', size[0]);
+	document.documentElement.style .setProperty('--wid', size[1]);
+	document.getElementsByTagName("main")[0].innerHTML='<div id="snake"></div>';
+	interwalel = setInterval(game,speed);
+	game();
+}
+document.addEventListener('keydown', (e) => {
+	pressedArrow = e.code;
+});
