@@ -1,14 +1,40 @@
+<!-- pik ♠︎   kier ♥︎   trefl ♣   karo ♦ -->
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Solitaire</title>
+	<title>Pasjans</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
 	<script type="text/javascript" src="script.js"></script>
-	<main></main>
+</head>
+<body style="--cw: 150px; --ch: calc(var(--cw) / 3 * 5);">
+	<section>
+		<div id="top">
+			<div id="left">
+				<div class="column0"><div class="pickcard" onclick="pick(this)"></div><div id="p0"></div></div>
+				<div class="column0"><div class="empty"></div><div id="p1"></div></div>
+				<div class="cb"></div>
+			</div>
+			<div id="right">
+				<div class="column column1"><div class="empty"></div><div id="p2"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p3"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p4"></div></div>
+				<div class="column column1"><div class="empty"></div><div id="p5"></div></div>
+				<div class="cb"></div>
+			</div>
+			<div class="cb"></div>
+		</div>
+		<div id="bottom">
+			<div class="column column2"><div class="empty"></div><div id="p6"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p7"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p8"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p9"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p10"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p11"></div></div>
+			<div class="column column2"><div class="empty"></div><div id="p12"></div></div>
+			<div class="cb"></div>
+		</div>
+	</section>
 	<section>
 		<a href="https://github.com/kasztandor">https://github.com/kasztandor</a>
 	</section>

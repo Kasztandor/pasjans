@@ -1,95 +1,116 @@
-:root{
-	--wid: 21;
-	--hei: 17;
-	--headdirection: 0% 0% 0% 0%;
-	--skin0: url("resources/default/skin0.png");
-	--skin1: url("resources/default/skin1.png");
-	--skin2: url("resources/default/skin2.png");
-	--bgground: url("resources/default/background.png");
-	--fruit: url("resources/default/fruit.png");
-	--box-size: 50px;
-}
+/* pik ♠︎ kier ♥︎ trefl ♣ karo ♦ */
 body{
-	margin: 0;
-	padding: 0;
-}
-#snake{
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	width: calc((var(--wid) * var(--box-size)));
-	height: calc((var(--hei) * var(--box-size)));
 	background-color: green;
-	background-image: var(--bgground);
-	background-size: var(--box-size) var(--box-size);
-	background-repeat: repeat;
+	margin: 0;
+	padding: 10px;
+	position: relative;
+	user-select: none;
+}
+/* TOP */
+#left, #right{
+	float: left;
+	height: calc(var(--ch) + 10px);
+}
+#left{
+	width: 30%;
+	max-width: calc(var(--cw) * 2 + 40px);
+}
+#right{
+	float: right;
+	width: 60%;
+	max-width: calc(var(--cw) * 4 + 80px);
+}
+.column0{
+	float: left;
+	width: calc(100% / 2);
+}
+.column1{
+	float: right;
+	width: calc(100% / 4);
+}
+/* BOTTOM */
+#bottom{
+	max-width: calc(var(--cw) * 7 + 140px);
 	margin: 0 auto;
 }
-.a, #frucht{
+.column2{
+	float: left;
+	width: calc(100% / 7);
+}
+/* Universal */
+.column0, .column1, .column2{
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+div{
+	min-height: 1px;
+}
+.empty, .card, .hidecard, .pickcard{
 	position: absolute;
-	width: var(--box-size);
-	height: var(--box-size);
-}
-.ba{
-	background-color: #F699CD;
-	background-image: var(--skin1);
-	background-size: var(--box-size) var(--box-size);
-	background-repeat: repeat;
-}
-.bb{
-	background-color: #FC94AF;
-	background-image: var(--skin2);
-	background-size: var(--box-size) var(--box-size);
-	background-repeat: repeat;
-}
-.c{
-	background-color: #F26B8A;
-	border-radius: var(--headdirection);
-	background-image: var(--skin0);
-	background-size: var(--box-size) var(--box-size);
-	background-repeat: repeat;
-}
-#frucht{
-	background-image: var(--fruit);
-	background-size: var(--box-size) var(--box-size);
-	background-repeat: repeat;
-}
-#snejklus{
-	position: absolute;
-	top: calc(50% - 5vh);
+	top: 0;
 	left: 50%;
-	transform: translate(-50%,-50%);
-	font-size: 5vh;
-	text-shadow: 2px 2px 2px white;
-	text-shadow: -2px 2px 2px white;
-	text-shadow: 2px -2px 2px white;
-	text-shadow: -2px -2px 2px white;
+	transform: translate(-50%, 0);
+	width: var(--cw);
+	height: var(--ch);
+	border: 1px solid black;
+	border-radius: 10px;
 }
-#wynikulus{
+.empty{
+	background-color: darkgreen;
+}
+.card{
+	background-color: white;
+	cursor: grab;
+	text-align: center;
+	line-height: calc((var(--ch) / 8));
+}
+.hidecard{
+	background-color: blue;
+	color: bule;
+	font-size: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.pickcard{
+	background-color: blue;
+	cursor: pointer;
+}
+.pickcardRedro{
+	background-color: darkgreen;
+}
+.cb{
+	clear: both;
+}
+.dragging{
+	background-color: gray;
+}
+.pik{color: black;} /*♠︎*/
+.pik:after{
+	content: "♠︎";
+}
+.kier{color: red;} /*♥︎*/
+.kier:after{
+	content: "♥︎";
+}
+.trefl{color: black;} /*♣*/
+.trefl:after{
+	content: "♣";
+}
+.karo{color: red;} /*♦*/
+.karo:after{
+	content: "♦";
+}
+#win{
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	text-shadow: 2px 2px 2px white;
-	text-shadow: -2px 2px 2px white;
-	text-shadow: 2px -2px 2px white;
-	text-shadow: -2px -2px 2px white;
-}
-#divulus{
-	position: absolute;
-	top: calc(50% + 5vh);
-	left: 50%;
-	transform: translate(-50%,-50%);
-	z-index: 1;
-}
-img{
-	width: var(--box-size);
-	height: var(--box-size);
-}
-.dimg{
-	width: 50px;
-	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: calc(100vw - 20px);
+	height: calc(100vh - 20px);
+	font-size: 50vh;
+	color: red;
 }
 
 section:last-child{
@@ -103,7 +124,7 @@ section:last-child{
 }
 section:last-child a{
 	text-decoration: none;
-	color: black;
+	color: white;
 }
 section:last-child a:hover{
 	text-decoration: underline;
