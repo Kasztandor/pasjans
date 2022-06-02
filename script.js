@@ -13,7 +13,7 @@ function checkWin(){
 			})
 		})
 		if (count){
-			document.querySelector("section").innerHTML='<div id="win">WIN</div>'
+			document.querySelector("main").innerHTML='<div id="win">WIN</div>'
 		}
 	}
 }
