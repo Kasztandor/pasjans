@@ -1,3 +1,1 @@
-# Simple javascript soliaire
-
-
+Moved to [Kasztandor/fun.kasztandor.pl](https://github.com/Kasztandor/fun.kasztandor.pl)
